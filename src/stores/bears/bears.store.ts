@@ -21,7 +21,7 @@ interface IBearState {
   };
 }
 
-export const useBearStore = create<IBearState>((set, get) => ({
+export const useBearStore = create<IBearState>()((set, get) => ({
   blackBears: 0,
   polarBears: 0,
   pandaBears: 0,

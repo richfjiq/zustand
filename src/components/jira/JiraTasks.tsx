@@ -4,6 +4,9 @@ import {
 } from 'react-icons/io5';
 import { Task, TaskStatus } from '../../interfaces';
 import SingleTask from './SingleTask';
+import { type DragEvent } from 'react';
+import { useTaskStore } from '../../stores';
+import classNames from 'classnames';
 
 interface Props {
   title: string;
@@ -11,9 +14,33 @@ interface Props {
   tasks: Task[];
 }
 
-export const JiraTasks = ({ title, tasks }: Props) => {
+export const JiraTasks = ({ title, tasks, value }: Props) => {
+  const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={classNames(
+        '!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]',
+        {
+          'border-dotted border-blue-500': isDragging,
+        },
+      )}
+    >
       {/* Task Header */}
       <div className="relative flex flex-row justify-between">
         <div className="flex items-center justify-center">

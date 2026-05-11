@@ -4,7 +4,7 @@ import {
 } from 'react-icons/io5';
 import { Task, TaskStatus } from '../../interfaces';
 import SingleTask from './SingleTask';
-import { type DragEvent } from 'react';
+import { useState, type DragEvent } from 'react';
 import { useTaskStore } from '../../stores';
 import classNames from 'classnames';
 
@@ -16,17 +16,23 @@ interface Props {
 
 export const JiraTasks = ({ title, tasks, value }: Props) => {
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const [onDragOver, setOnDragOver] = useState(false);
+  const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setOnDragOver(true);
   };
 
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setOnDragOver(false);
   };
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setOnDragOver(false);
+    onTaskDrop(value);
   };
 
   return (
@@ -38,6 +44,7 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
         '!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]',
         {
           'border-dotted border-blue-500': isDragging,
+          'border-green-500 border-dotted': isDragging && onDragOver,
         },
       )}
     >
